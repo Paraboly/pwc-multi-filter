@@ -10,53 +10,27 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 
 
 export namespace Components {
-  interface ComponentName {
-    /**
-    * The first name
-    */
-    'first': string;
-    /**
-    * The last name
-    */
-    'last': string;
-    /**
-    * The middle name
-    */
-    'middle': string;
-  }
+  interface PwcMultiFilter {}
 }
 
 declare global {
 
 
-  interface HTMLComponentNameElement extends Components.ComponentName, HTMLStencilElement {}
-  var HTMLComponentNameElement: {
-    prototype: HTMLComponentNameElement;
-    new (): HTMLComponentNameElement;
+  interface HTMLPwcMultiFilterElement extends Components.PwcMultiFilter, HTMLStencilElement {}
+  var HTMLPwcMultiFilterElement: {
+    prototype: HTMLPwcMultiFilterElement;
+    new (): HTMLPwcMultiFilterElement;
   };
   interface HTMLElementTagNameMap {
-    'component-name': HTMLComponentNameElement;
+    'pwc-multi-filter': HTMLPwcMultiFilterElement;
   }
 }
 
 declare namespace LocalJSX {
-  interface ComponentName {
-    /**
-    * The first name
-    */
-    'first'?: string;
-    /**
-    * The last name
-    */
-    'last'?: string;
-    /**
-    * The middle name
-    */
-    'middle'?: string;
-  }
+  interface PwcMultiFilter {}
 
   interface IntrinsicElements {
-    'component-name': ComponentName;
+    'pwc-multi-filter': PwcMultiFilter;
   }
 }
 
@@ -66,7 +40,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
   export namespace JSX {
     interface IntrinsicElements {
-      'component-name': LocalJSX.ComponentName & JSXBase.HTMLAttributes<HTMLComponentNameElement>;
+      'pwc-multi-filter': LocalJSX.PwcMultiFilter & JSXBase.HTMLAttributes<HTMLPwcMultiFilterElement>;
     }
   }
 }
