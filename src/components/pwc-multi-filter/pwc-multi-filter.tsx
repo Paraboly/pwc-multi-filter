@@ -1,6 +1,8 @@
 import { Component, h, Method, State } from "@stencil/core";
 import { PwcMultiFilterInterfaces } from "./PwcMultiFilterInterfaces";
 import _ from "lodash";
+import "@paraboly/pwc-filter";
+import "@paraboly/pwc-tabview";
 
 @Component({
   tag: "pwc-multi-filter",

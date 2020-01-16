@@ -35,26 +35,6 @@ Type: `Promise<object[]>`
 
 
 
-### `getFilterTab(name: string) => Promise<PwcMultiFilterInterfaces.IFilterTabRef>`
-
-
-
-#### Returns
-
-Type: `Promise<IFilterTabRef>`
-
-
-
-### `getTab(name: string) => Promise<HTMLPwcTabviewTabElement>`
-
-
-
-#### Returns
-
-Type: `Promise<HTMLPwcTabviewTabElement>`
-
-
-
 ### `removeFilter(name: string) => Promise<void>`
 
 

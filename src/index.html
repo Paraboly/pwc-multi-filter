@@ -20,6 +20,12 @@
   <body>
     <pwc-multi-filter></pwc-multi-filter>
 
+    <br />
+    <hr />
+    <br />
+
+    <button id="addFilterButton">Add New Filter</button>
+
     <script>
       const data = [
         {
@@ -161,6 +167,16 @@
             name: "third",
             data: data,
             items: items
+          });
+
+          let newFilterIndex = 0;
+
+          document.querySelector("#addFilterButton").addEventListener("click", e => {
+            multiFilter.addFilter({
+            name: ++newFilterIndex,
+            data: data,
+            items: items
+          });
           });
         });
     </script>
