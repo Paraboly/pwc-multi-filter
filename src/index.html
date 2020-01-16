@@ -15,16 +15,35 @@
     body {
       background-color: rgb(185, 255, 222);
     }
+
+    .separator {
+      margin-top:50px;
+      margin-bottom:50px;
+      border-top: 1px solid black;
+    }
     </style>
   </head>
   <body>
     <pwc-multi-filter></pwc-multi-filter>
 
-    <br />
-    <hr />
-    <br />
+    <div class="separator"></div>
 
     <button id="addFilterButton">Add New Filter</button>
+
+    <div class="separator"></div>
+
+    <form id="getValuesForm">
+      <label>
+        Filter Name:
+        <input type="text" name="name" placeholder="enter filter name..." />
+      </label>
+      <input type="submit" value="Get Filter Result" />
+    </form>
+
+    <div style="margin-top:25px">
+      Result: 
+      <div id="filterResultOutput"></div>
+    </div>
 
     <script>
       const data = [
@@ -174,6 +193,14 @@
 
             multiFilter.subscribeToFilterChange(index, e => {
               console.log(index + " changed", e);
+            });
+          });
+
+          document.querySelector("#getValuesForm").addEventListener("submit", e => {
+            e.preventDefault();
+            const filterName = e.target.elements.name.value;
+            multiFilter.getFilterResult(filterName).then(a => {
+              document.querySelector("#filterResultOutput").innerHTML = JSON.stringify(a);
             });
           });
         });
