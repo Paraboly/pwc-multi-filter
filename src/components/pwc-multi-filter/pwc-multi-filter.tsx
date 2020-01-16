@@ -10,8 +10,13 @@ import "@paraboly/pwc-tabview";
 })
 export class PwcMultiFilter {
   @State() filterConfigs: PwcMultiFilterInterfaces.IFilterTabConfig[] = [];
+
   private filterRefs: {
     [key: string]: HTMLPwcFilterElement;
+  } = {};
+
+  private filterChangedEventSubscribers: {
+    [key: string]: Array<(e) => void>;
   } = {};
 
   @Method()
@@ -22,6 +27,8 @@ export class PwcMultiFilter {
   @Method()
   async removeFilter(name: string) {
     this.filterConfigs = _.remove(this.filterConfigs, f => f.name === name);
+    delete this.filterRefs[name];
+    delete this.filterChangedEventSubscribers[name];
   }
 
   @Method()
@@ -36,13 +43,17 @@ export class PwcMultiFilter {
       filterChangedEvent
     ) => void
   ) {
-    const filter = this.filterRefs[name];
-    filter.addEventListener("filterChanged", callback);
+    this.filterChangedEventSubscribers[name] = this.filterChangedEventSubscribers[name] || [];
+    this.filterChangedEventSubscribers[name].push(callback);
   }
 
   @Method()
   async getFilterResult(name: string): Promise<object[]> {
     return this.filterRefs[name].filter();
+  }
+
+  handleChangeEvent(name: string, event) {
+    this.filterChangedEventSubscribers[name].forEach(callback => callback(event));
   }
 
   constructFilterTab(filter: PwcMultiFilterInterfaces.IFilterTabConfig) {
@@ -58,7 +69,17 @@ export class PwcMultiFilter {
   }
 
   registerFilterRef(name: string, filterRef: HTMLPwcFilterElement) {
+    const existingRef = this.filterRefs[name];
     this.filterRefs[name] = filterRef;
+
+    if(existingRef != filterRef) {
+      this.firstTimeFilterSetup(name, filterRef);
+    }
+
+  }
+
+  firstTimeFilterSetup(name: string, filterRef: HTMLPwcFilterElement) {
+    filterRef.addEventListener("filterChanged", this.handleChangeEvent.bind(this, name));
   }
 
   render() {

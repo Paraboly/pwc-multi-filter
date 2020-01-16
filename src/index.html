@@ -157,26 +157,24 @@
             items: items
           });
 
-          multiFilter.addFilter({
-            name: "second",
-            data: data,
-            items: items
-          });
+          multiFilter.subscribeToFilterChange("first", e => {
+              console.log("first changed", e);
+            });
 
-          multiFilter.addFilter({
-            name: "third",
-            data: data,
-            items: items
-          });
-
-          let newFilterIndex = 0;
+          let newFilterIndexer = 0;
 
           document.querySelector("#addFilterButton").addEventListener("click", e => {
+            const index = ++newFilterIndexer;
+
             multiFilter.addFilter({
-            name: ++newFilterIndex,
-            data: data,
-            items: items
-          });
+              name: index,
+              data: data,
+              items: items
+            }); 
+
+            multiFilter.subscribeToFilterChange(index, e => {
+              console.log(index + " changed", e);
+            });
           });
         });
     </script>
