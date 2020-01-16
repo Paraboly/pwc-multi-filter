@@ -10,6 +10,9 @@ import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
 import {
   PwcMultiFilterInterfaces,
 } from './components/pwc-multi-filter/PwcMultiFilterInterfaces';
+import {
+  _filterChangedEventType,
+} from './components/pwc-multi-filter/pwc-multi-filter';
 
 export namespace Components {
   interface PwcMultiFilter {
@@ -17,7 +20,7 @@ export namespace Components {
     'getFilter': (name: string) => Promise<HTMLPwcFilterElement>;
     'getFilterResult': (name: string) => Promise<object[]>;
     'removeFilter': (name: string) => Promise<void>;
-    'subscribeToFilterChange': (name: string, callback: (filterChangedEvent: any) => void) => Promise<void>;
+    'subscribeToFilterChange': (name: string, callback: (filterChangedEvent: _filterChangedEventType) => void) => Promise<void>;
   }
 }
 

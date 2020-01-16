@@ -1,7 +1,7 @@
 {
   "name": "@paraboly/pwc-multi-filter",
   "version": "0.0.1",
-  "description": "Template repository for Paraboly Web Component Libraries",
+  "description": "A wrapper over pwc-tabview and pwc-filter. Provides means of dynamically managing multiple filters via a single component.",
   "keywords": [
     "paraboly",
     "stencil",
@@ -14,7 +14,7 @@
   "homepage": "https://www.paraboly.com",
   "bugs": "https://github.com/Paraboly/pwc-multi-filter/issues",
   "repository": "git@github.com:Paraboly/pwc-multi-filter.git",
-  "author": "Author (https://author.url.here/) <author@email.com>",
+  "author": "starikcetin (https://github.com/starikcetin) <cetinsamedtarik@gmail.com>",
   "license": "MIT",
   "main": "dist/index.js",
   "module": "dist/index.mjs",

@@ -3,6 +3,9 @@ import { PwcMultiFilterInterfaces } from "./PwcMultiFilterInterfaces";
 import _ from "lodash";
 import "@paraboly/pwc-filter";
 import "@paraboly/pwc-tabview";
+import { PwcFilter } from "@paraboly/pwc-filter/dist/types/utils/PwcFilter";
+
+export type _filterChangedEventType = CustomEvent<PwcFilter.FilterChangedEventPayload>;
 
 @Component({
   tag: "pwc-multi-filter",
@@ -16,7 +19,7 @@ export class PwcMultiFilter {
   } = {};
 
   private filterChangedEventSubscribers: {
-    [key: string]: Array<(e) => void>;
+    [key: string]: Array<(filterChangedEvent: _filterChangedEventType) => void>;
   } = {};
 
   @Method()
@@ -40,7 +43,7 @@ export class PwcMultiFilter {
   async subscribeToFilterChange(
     name: string,
     callback: (
-      filterChangedEvent
+      filterChangedEvent: _filterChangedEventType
     ) => void
   ) {
     this.filterChangedEventSubscribers[name] = this.filterChangedEventSubscribers[name] || [];

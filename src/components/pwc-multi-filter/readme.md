@@ -45,7 +45,7 @@ Type: `Promise<void>`
 
 
 
-### `subscribeToFilterChange(name: string, callback: (filterChangedEvent: any) => void) => Promise<void>`
+### `subscribeToFilterChange(name: string, callback: (filterChangedEvent: _filterChangedEventType) => void) => Promise<void>`
 
 
 
