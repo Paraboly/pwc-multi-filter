@@ -1,4 +1,4 @@
-import { Component, h, Method, State } from "@stencil/core";
+import { Component, h, Method, State, Element } from "@stencil/core";
 import { PwcMultiFilterInterfaces } from "./PwcMultiFilterInterfaces";
 import _ from "lodash";
 import "@paraboly/pwc-filter";
@@ -12,6 +12,8 @@ export type _filterChangedEventType = CustomEvent<PwcFilter.FilterChangedEventPa
   shadow: false
 })
 export class PwcMultiFilter {
+  @Element() root: HTMLPwcMultiFilterElement;
+
   @State() filterConfigs: PwcMultiFilterInterfaces.IFilterTabConfig[] = [];
 
   private filterRefs: {
@@ -29,9 +31,9 @@ export class PwcMultiFilter {
 
   @Method()
   async removeFilter(name: string) {
-    this.filterConfigs = _.remove(this.filterConfigs, f => f.name === name);
-    delete this.filterRefs[name];
-    delete this.filterChangedEventSubscribers[name];
+    const filtered = _.filter(this.filterConfigs, val => val.name !== name); 
+    this.filterConfigs = [...filtered];
+    console.log(this.filterConfigs);
   }
 
   @Method()
@@ -55,7 +57,7 @@ export class PwcMultiFilter {
     return this.filterRefs[name].filter();
   }
 
-  handleChangeEvent(name: string, event) {
+  handleChangeEvent(name: string, event: _filterChangedEventType) {
     this.filterChangedEventSubscribers[name].forEach(callback => callback(event));
   }
 
@@ -66,9 +68,18 @@ export class PwcMultiFilter {
 
     return (
       <pwc-tabview-tab handle={name}>
-        <pwc-filter data={filterData} items={filterItems} ref={this.registerFilterRef.bind(this, name)}></pwc-filter>
+        <pwc-filter data={filterData} items={filterItems}></pwc-filter>
       </pwc-tabview-tab>
     );
+  }
+
+  componentDidRender() {
+    const tabs = this.root.querySelectorAll("pwc-tabview-tab");
+    tabs.forEach(tab => {
+      const handle = tab.handle;
+      const filter = tab.querySelector("pwc-filter");
+      this.registerFilterRef(handle, filter);
+    });
   }
 
   registerFilterRef(name: string, filterRef: HTMLPwcFilterElement) {
@@ -78,7 +89,6 @@ export class PwcMultiFilter {
     if(existingRef != filterRef) {
       this.firstTimeFilterSetup(name, filterRef);
     }
-
   }
 
   firstTimeFilterSetup(name: string, filterRef: HTMLPwcFilterElement) {

@@ -35,9 +35,10 @@
     <form id="getValuesForm">
       <label>
         Filter Name:
-        <input type="text" name="name" placeholder="enter filter name..." />
+        <input type="text" id="filterName" name="name" placeholder="enter filter name..." />
       </label>
-      <input type="submit" value="Get Filter Result" />
+      <input type="button" id="getFilterResult" value="Get Filter Result" />
+      <input type="button" id="removeFilter" value="Remove Filter" />
     </form>
 
     <div style="margin-top:25px">
@@ -183,7 +184,7 @@
           let newFilterIndexer = 0;
 
           document.querySelector("#addFilterButton").addEventListener("click", e => {
-            const index = ++newFilterIndexer;
+            const index = (++newFilterIndexer).toString();
 
             multiFilter.addFilter({
               name: index,
@@ -196,13 +197,19 @@
             });
           });
 
-          document.querySelector("#getValuesForm").addEventListener("submit", e => {
+          document.querySelector("#getFilterResult").addEventListener("click", e => {
             e.preventDefault();
-            const filterName = e.target.elements.name.value;
+            const filterName = document.querySelector("#filterName").value;
             multiFilter.getFilterResult(filterName).then(a => {
               document.querySelector("#filterResultOutput").innerHTML = JSON.stringify(a);
             });
           });
+
+          document.querySelector("#removeFilter").addEventListener("click", e => {
+            e.preventDefault();
+            const filterName = document.querySelector("#filterName").value;
+            multiFilter.removeFilter(filterName);
+          })
         });
     </script>
   </body>
