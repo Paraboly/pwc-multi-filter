@@ -7,10 +7,21 @@
 
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-
+import {
+  PwcMultiFilterInterfaces,
+} from './components/pwc-multi-filter/PwcMultiFilterInterfaces';
+import {
+  _filterChangedEventType,
+} from './components/pwc-multi-filter/pwc-multi-filter';
 
 export namespace Components {
-  interface PwcMultiFilter {}
+  interface PwcMultiFilter {
+    'addFilter': (config: PwcMultiFilterInterfaces.IFilterTabConfig) => Promise<void>;
+    'getFilter': (name: string) => Promise<HTMLPwcFilterElement>;
+    'getFilterResult': (name: string) => Promise<object[]>;
+    'removeFilter': (name: string) => Promise<void>;
+    'subscribeToFilterChange': (name: string, callback: (filterChangedEvent: _filterChangedEventType) => void) => Promise<void>;
+  }
 }
 
 declare global {
