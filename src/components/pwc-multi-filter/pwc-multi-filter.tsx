@@ -5,6 +5,7 @@ import "@paraboly/pwc-filter";
 import "@paraboly/pwc-tabview";
 import { PwcFilter } from "@paraboly/pwc-filter/dist/types/utils/PwcFilter";
 
+// This is the only way this works, and the export has to stay as well, otherwise it throws "PwcFilter not found".
 export type _filterChangedEventType = CustomEvent<PwcFilter.FilterChangedEventPayload>;
 
 @Component({
