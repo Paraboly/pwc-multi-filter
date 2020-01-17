@@ -31,9 +31,8 @@ export class PwcMultiFilter {
 
   @Method()
   async removeFilter(name: string) {
-    const filtered = _.filter(this.filterConfigs, val => val.name !== name); 
+    const filtered = this.filterConfigs.filter(val => val.name !== name); 
     this.filterConfigs = [...filtered];
-    console.log(this.filterConfigs);
   }
 
   @Method()
@@ -62,13 +61,9 @@ export class PwcMultiFilter {
   }
 
   constructFilterTab(filter: PwcMultiFilterInterfaces.IFilterTabConfig) {
-    const name = filter.name;
-    const filterData = filter.data;
-    const filterItems = filter.items;
-
     return (
-      <pwc-tabview-tab handle={name}>
-        <pwc-filter data={filterData} items={filterItems}></pwc-filter>
+      <pwc-tabview-tab handle={filter.name}>
+        <pwc-filter data={filter.data} items={filter.items}></pwc-filter>
       </pwc-tabview-tab>
     );
   }
@@ -87,11 +82,11 @@ export class PwcMultiFilter {
     this.filterRefs[name] = filterRef;
 
     if(existingRef != filterRef) {
-      this.firstTimeFilterSetup(name, filterRef);
+      this.initialFilterSetup(name, filterRef);
     }
   }
 
-  firstTimeFilterSetup(name: string, filterRef: HTMLPwcFilterElement) {
+  initialFilterSetup(name: string, filterRef: HTMLPwcFilterElement) {
     filterRef.addEventListener("filterChanged", this.handleChangeEvent.bind(this, name));
   }
 
