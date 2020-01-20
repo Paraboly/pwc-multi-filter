@@ -12,15 +12,15 @@
     <script nomodule src="/build/pwc-multi-filter.js"></script>
 
     <style>
-    body {
-      background-color: rgb(185, 255, 222);
-    }
+      body {
+        background-color: rgb(185, 255, 222);
+      }
 
-    .separator {
-      margin-top:50px;
-      margin-bottom:50px;
-      border-top: 1px solid black;
-    }
+      .separator {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        border-top: 1px solid black;
+      }
     </style>
   </head>
   <body>
@@ -35,14 +35,19 @@
     <form id="getValuesForm">
       <label>
         Filter Name:
-        <input type="text" id="filterName" name="name" placeholder="enter filter name..." />
+        <input
+          type="text"
+          id="filterName"
+          name="name"
+          placeholder="enter filter name..."
+        />
       </label>
       <input type="button" id="getFilterResult" value="Get Filter Result" />
       <input type="button" id="removeFilter" value="Remove Filter" />
     </form>
 
     <div style="margin-top:25px">
-      Result: 
+      Result:
       <div id="filterResultOutput"></div>
     </div>
 
@@ -154,12 +159,12 @@
         {
           type: "select-multiple",
           dataField: "foo",
-          label: "foo",
+          label: "foo"
         },
         {
           type: "select-single",
           dataField: "thud",
-          label: "thud",
+          label: "thud"
         },
         {
           type: "checkbox",
@@ -168,53 +173,59 @@
         }
       ];
 
-        document.addEventListener("DOMContentLoaded", e => {
-          const multiFilter = document.querySelector("pwc-multi-filter");
+      document.addEventListener("DOMContentLoaded", e => {
+        const multiFilter = document.querySelector("pwc-multi-filter");
 
-          multiFilter.addFilter({
-            name: "first",
-            data: data,
-            items: items
-          });
+        multiFilter.addFilter({
+          name: "first",
+          data: data,
+          items: items
+        });
 
-          multiFilter.subscribeToFilterChange("first", e => {
-              console.log("first changed", e);
-            });
+        multiFilter.subscribeToFilterChange("first", e => {
+          console.log("first changed", e);
+        });
 
-          let newFilterIndexer = 0;
+        let newFilterIndexer = 0;
 
-          document.querySelector("#addFilterButton").addEventListener("click", e => {
+        document
+          .querySelector("#addFilterButton")
+          .addEventListener("click", e => {
             const index = (++newFilterIndexer).toString();
 
             multiFilter.addFilter({
               name: index,
               data: data,
               items: items
-            }); 
+            });
 
             multiFilter.subscribeToFilterChange(index, e => {
               console.log(index + " changed", e);
             });
           });
 
-          document.querySelector("#getFilterResult").addEventListener("click", e => {
+        document
+          .querySelector("#getFilterResult")
+          .addEventListener("click", e => {
             e.preventDefault();
             const filterName = document.querySelector("#filterName").value;
             multiFilter.getFilterResult(filterName).then(a => {
-              document.querySelector("#filterResultOutput").innerHTML = JSON.stringify(a);
+              document.querySelector(
+                "#filterResultOutput"
+              ).innerHTML = JSON.stringify(a);
             });
           });
 
-          document.querySelector("#removeFilter").addEventListener("click", e => {
-            e.preventDefault();
-            const filterName = document.querySelector("#filterName").value;
-            multiFilter.removeFilter(filterName);
-          });
-
-          multiFilter.addEventListener("activeFilterChanged", e => {
-            console.log("active filter changed", e.detail);
-          });
+        document.querySelector("#removeFilter").addEventListener("click", e => {
+          e.preventDefault();
+          const filterName = document.querySelector("#filterName").value;
+          multiFilter.removeFilter(filterName);
         });
+
+        multiFilter.addEventListener("activeFilterChanged", e => {
+          console.log("active filter changed", e.detail);
+        });
+      });
     </script>
   </body>
 </html>

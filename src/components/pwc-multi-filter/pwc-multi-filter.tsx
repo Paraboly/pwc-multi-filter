@@ -1,4 +1,13 @@
-import { Component, h, Method, State, Element, Listen, Event, EventEmitter } from "@stencil/core";
+import {
+  Component,
+  h,
+  Method,
+  State,
+  Element,
+  Listen,
+  Event,
+  EventEmitter
+} from "@stencil/core";
 import { PwcMultiFilterInterfaces } from "./PwcMultiFilterInterfaces";
 import _ from "lodash";
 import "@paraboly/pwc-filter";
@@ -7,7 +16,9 @@ import { PwcFilter } from "@paraboly/pwc-filter/dist/types/utils/PwcFilter";
 import { PwcTabviewInterfaces } from "@paraboly/pwc-tabview/dist/types/interfaces/PwcTabviewInterfaces";
 
 // This is the only way this works, and the export has to stay as well, otherwise it throws "PwcFilter not found".
-export type _filterChangedEventType = CustomEvent<PwcFilter.FilterChangedEventPayload>;
+export type _filterChangedEventType = CustomEvent<
+  PwcFilter.FilterChangedEventPayload
+>;
 
 @Component({
   tag: "pwc-multi-filter",
@@ -18,8 +29,6 @@ export class PwcMultiFilter {
 
   @State() filterConfigs: PwcMultiFilterInterfaces.IFilterTabConfig[] = [];
 
-  private activeFilter : HTMLPwcFilterElement;
-
   private filterRefs: {
     [key: string]: HTMLPwcFilterElement;
   } = {};
@@ -28,19 +37,34 @@ export class PwcMultiFilter {
     [key: string]: Array<(filterChangedEvent: _filterChangedEventType) => void>;
   } = {};
 
-  @Event() activeFilterChanged: EventEmitter<PwcMultiFilterInterfaces.IActiveFilterChangedEventPayload>;
+  private activeFilterName: string;
+  private activeFilterRef: HTMLPwcFilterElement;
 
-  @Listen('tabChanged')
-  async tabChangedEventHandler(e: CustomEvent<PwcTabviewInterfaces.ITabChangedEventPayload>) {
-    const name = e.detail.handle;
-    const activeFilter = await this.getFilter(name);
-    this.activeFilter = activeFilter;
-    this.activeFilterChanged.emit({originalEvent: e, filterName: name, filterRef: activeFilter});
+  private tabViewRef: HTMLPwcTabviewElement;
+
+  @Event() activeFilterChanged: EventEmitter<
+    PwcMultiFilterInterfaces.IActiveFilterChangedEventPayload
+  >;
+
+  @Listen("tabChanged")
+  async tabChangedEventHandler(
+    e: CustomEvent<PwcTabviewInterfaces.ITabChangedEventPayload>
+  ) {
+    this.setActiveState(e.detail.handle);
   }
 
   @Method()
-  async getActiveFilter() {
-    return this.activeFilter;
+  async getActiveState() {
+    return {
+      filterRef: this.activeFilterRef,
+      filterName: this.activeFilterName
+    };
+  }
+
+  @Method()
+  async switchToFilter(name: string) {
+    // we set the tab's state -> tab emits an event -> we set our inner state -> we emit an event
+    this.tabViewRef.switchToTab(name);
   }
 
   @Method()
@@ -50,7 +74,7 @@ export class PwcMultiFilter {
 
   @Method()
   async removeFilter(name: string) {
-    const filtered = this.filterConfigs.filter(val => val.name !== name); 
+    const filtered = this.filterConfigs.filter(val => val.name !== name);
     this.filterConfigs = [...filtered];
   }
 
@@ -62,11 +86,10 @@ export class PwcMultiFilter {
   @Method()
   async subscribeToFilterChange(
     name: string,
-    callback: (
-      filterChangedEvent: _filterChangedEventType
-    ) => void
+    callback: (filterChangedEvent: _filterChangedEventType) => void
   ) {
-    this.filterChangedEventSubscribers[name] = this.filterChangedEventSubscribers[name] || [];
+    this.filterChangedEventSubscribers[name] =
+      this.filterChangedEventSubscribers[name] || [];
     this.filterChangedEventSubscribers[name].push(callback);
   }
 
@@ -75,46 +98,63 @@ export class PwcMultiFilter {
     return this.filterRefs[name].filter();
   }
 
-  handleChangeEvent(name: string, event: _filterChangedEventType) {
-    this.filterChangedEventSubscribers[name].forEach(callback => callback(event));
-  }
+  setActiveState(activeFilterName: string) {
+    this.activeFilterName = activeFilterName;
+    this.activeFilterRef = this.filterRefs[activeFilterName];
 
-  constructFilterTab(filter: PwcMultiFilterInterfaces.IFilterTabConfig) {
-    return (
-      <pwc-tabview-tab handle={filter.name}>
-        <pwc-filter data={filter.data} items={filter.items}></pwc-filter>
-      </pwc-tabview-tab>
-    );
-  }
-
-  componentDidRender() {
-    const tabs = this.root.querySelectorAll("pwc-tabview-tab");
-    tabs.forEach(tab => {
-      const handle = tab.handle;
-      const filter = tab.querySelector("pwc-filter");
-      this.registerFilterRef(handle, filter);
+    this.activeFilterChanged.emit({
+      filterName: this.activeFilterName,
+      filterRef: this.activeFilterRef
     });
+  }
+
+  handleChangeEvent(name: string, event: _filterChangedEventType) {
+    this.filterChangedEventSubscribers[name].forEach(callback =>
+      callback(event)
+    );
   }
 
   registerFilterRef(name: string, filterRef: HTMLPwcFilterElement) {
     const existingRef = this.filterRefs[name];
     this.filterRefs[name] = filterRef;
 
-    if(existingRef != filterRef) {
+    if (existingRef != filterRef) {
       this.initialFilterSetup(name, filterRef);
     }
   }
 
   initialFilterSetup(name: string, filterRef: HTMLPwcFilterElement) {
-    filterRef.addEventListener("filterChanged", this.handleChangeEvent.bind(this, name));
+    filterRef.addEventListener(
+      "filterChanged",
+      this.handleChangeEvent.bind(this, name)
+    );
+  }
+
+  switchToFirstFilter() {
+    const firstTabName = this.filterConfigs[0].name;
+    this.switchToFilter(firstTabName);
+  }
+
+  constructFilterTab(filter: PwcMultiFilterInterfaces.IFilterTabConfig) {
+    return (
+      <pwc-tabview-tab handle={filter.name}>
+        <pwc-filter
+          data={filter.data}
+          items={filter.items}
+          ref={el => this.registerFilterRef(filter.name, el)}
+        ></pwc-filter>
+      </pwc-tabview-tab>
+    );
   }
 
   render() {
     return (
-      this.filterConfigs && this.filterConfigs.length > 0 &&
-      <pwc-tabview>
-        {this.filterConfigs.map(filter => this.constructFilterTab(filter))}
-      </pwc-tabview>
+      this.filterConfigs &&
+      this.filterConfigs.length > 0 && (
+        <pwc-tabview ref={el => (this.tabViewRef = el)}>
+          {this.filterConfigs.map(filter => this.constructFilterTab(filter))}
+        </pwc-tabview>
+      )
     );
   }
 }

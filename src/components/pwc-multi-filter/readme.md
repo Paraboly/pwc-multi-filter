@@ -22,13 +22,13 @@ Type: `Promise<void>`
 
 
 
-### `getActiveFilter() => Promise<HTMLPwcFilterElement>`
+### `getActiveState() => Promise<{ filterRef: HTMLPwcFilterElement; filterName: string; }>`
 
 
 
 #### Returns
 
-Type: `Promise<HTMLPwcFilterElement>`
+Type: `Promise<{ filterRef: HTMLPwcFilterElement; filterName: string; }>`
 
 
 
@@ -63,6 +63,16 @@ Type: `Promise<void>`
 
 
 ### `subscribeToFilterChange(name: string, callback: (filterChangedEvent: _filterChangedEventType) => void) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `switchToFilter(name: string) => Promise<void>`
 
 
 

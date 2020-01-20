@@ -1,7 +1,6 @@
 import "@paraboly/pwc-filter";
 import "@paraboly/pwc-tabview";
 import { PwcFilter } from "@paraboly/pwc-filter/dist/types/utils/PwcFilter";
-import { PwcTabviewInterfaces } from "@paraboly/pwc-tabview/dist/types/interfaces/PwcTabviewInterfaces";
 
 // tslint:disable-next-line: no-namespace
 export namespace PwcMultiFilterInterfaces {
@@ -12,8 +11,7 @@ export namespace PwcMultiFilterInterfaces {
   }
 
   export interface IActiveFilterChangedEventPayload {
-    originalEvent: CustomEvent<PwcTabviewInterfaces.ITabChangedEventPayload>,
-    filterName: string,
-    filterRef: HTMLPwcFilterElement
+    filterName: string;
+    filterRef: HTMLPwcFilterElement;
   }
 }

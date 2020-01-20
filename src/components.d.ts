@@ -17,11 +17,12 @@ import {
 export namespace Components {
   interface PwcMultiFilter {
     'addFilter': (config: PwcMultiFilterInterfaces.IFilterTabConfig) => Promise<void>;
-    'getActiveFilter': () => Promise<HTMLPwcFilterElement>;
+    'getActiveState': () => Promise<{ filterRef: HTMLPwcFilterElement; filterName: string; }>;
     'getFilter': (name: string) => Promise<HTMLPwcFilterElement>;
     'getFilterResult': (name: string) => Promise<object[]>;
     'removeFilter': (name: string) => Promise<void>;
     'subscribeToFilterChange': (name: string, callback: (filterChangedEvent: _filterChangedEventType) => void) => Promise<void>;
+    'switchToFilter': (name: string) => Promise<void>;
   }
 }
 
