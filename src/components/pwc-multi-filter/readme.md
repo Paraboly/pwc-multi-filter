@@ -3,6 +3,13 @@
 <!-- Auto Generated Below -->
 
 
+## Events
+
+| Event                 | Description | Type                                            |
+| --------------------- | ----------- | ----------------------------------------------- |
+| `activeFilterChanged` |             | `CustomEvent<IActiveFilterChangedEventPayload>` |
+
+
 ## Methods
 
 ### `addFilter(config: PwcMultiFilterInterfaces.IFilterTabConfig) => Promise<void>`
@@ -12,6 +19,16 @@
 #### Returns
 
 Type: `Promise<void>`
+
+
+
+### `getActiveFilter() => Promise<HTMLPwcFilterElement>`
+
+
+
+#### Returns
+
+Type: `Promise<HTMLPwcFilterElement>`
 
 
 

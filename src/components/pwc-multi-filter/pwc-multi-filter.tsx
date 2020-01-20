@@ -1,9 +1,10 @@
-import { Component, h, Method, State, Element } from "@stencil/core";
+import { Component, h, Method, State, Element, Listen, Event, EventEmitter } from "@stencil/core";
 import { PwcMultiFilterInterfaces } from "./PwcMultiFilterInterfaces";
 import _ from "lodash";
 import "@paraboly/pwc-filter";
 import "@paraboly/pwc-tabview";
 import { PwcFilter } from "@paraboly/pwc-filter/dist/types/utils/PwcFilter";
+import { PwcTabviewInterfaces } from "@paraboly/pwc-tabview/dist/types/interfaces/PwcTabviewInterfaces";
 
 // This is the only way this works, and the export has to stay as well, otherwise it throws "PwcFilter not found".
 export type _filterChangedEventType = CustomEvent<PwcFilter.FilterChangedEventPayload>;
@@ -17,6 +18,8 @@ export class PwcMultiFilter {
 
   @State() filterConfigs: PwcMultiFilterInterfaces.IFilterTabConfig[] = [];
 
+  private activeFilter : HTMLPwcFilterElement;
+
   private filterRefs: {
     [key: string]: HTMLPwcFilterElement;
   } = {};
@@ -24,6 +27,21 @@ export class PwcMultiFilter {
   private filterChangedEventSubscribers: {
     [key: string]: Array<(filterChangedEvent: _filterChangedEventType) => void>;
   } = {};
+
+  @Event() activeFilterChanged: EventEmitter<PwcMultiFilterInterfaces.IActiveFilterChangedEventPayload>;
+
+  @Listen('tabChanged')
+  async tabChangedEventHandler(e: CustomEvent<PwcTabviewInterfaces.ITabChangedEventPayload>) {
+    const name = e.detail.handle;
+    const activeFilter = await this.getFilter(name);
+    this.activeFilter = activeFilter;
+    this.activeFilterChanged.emit({originalEvent: e, filterName: name, filterRef: activeFilter});
+  }
+
+  @Method()
+  async getActiveFilter() {
+    return this.activeFilter;
+  }
 
   @Method()
   async addFilter(config: PwcMultiFilterInterfaces.IFilterTabConfig) {

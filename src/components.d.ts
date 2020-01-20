@@ -17,6 +17,7 @@ import {
 export namespace Components {
   interface PwcMultiFilter {
     'addFilter': (config: PwcMultiFilterInterfaces.IFilterTabConfig) => Promise<void>;
+    'getActiveFilter': () => Promise<HTMLPwcFilterElement>;
     'getFilter': (name: string) => Promise<HTMLPwcFilterElement>;
     'getFilterResult': (name: string) => Promise<object[]>;
     'removeFilter': (name: string) => Promise<void>;
@@ -38,7 +39,9 @@ declare global {
 }
 
 declare namespace LocalJSX {
-  interface PwcMultiFilter {}
+  interface PwcMultiFilter {
+    'onActiveFilterChanged'?: (event: CustomEvent<PwcMultiFilterInterfaces.IActiveFilterChangedEventPayload>) => void;
+  }
 
   interface IntrinsicElements {
     'pwc-multi-filter': PwcMultiFilter;

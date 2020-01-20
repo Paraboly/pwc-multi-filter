@@ -209,7 +209,11 @@
             e.preventDefault();
             const filterName = document.querySelector("#filterName").value;
             multiFilter.removeFilter(filterName);
-          })
+          });
+
+          multiFilter.addEventListener("activeFilterChanged", e => {
+            console.log("active filter changed", e.detail);
+          });
         });
     </script>
   </body>
