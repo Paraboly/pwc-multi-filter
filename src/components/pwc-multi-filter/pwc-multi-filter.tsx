@@ -109,9 +109,10 @@ export class PwcMultiFilter {
   }
 
   handleChangeEvent(name: string, event: _filterChangedEventType) {
-    this.filterChangedEventSubscribers[name].forEach(callback =>
-      callback(event)
-    );
+    const subscribers = this.filterChangedEventSubscribers[name];
+    if (subscribers) {
+      subscribers.forEach(callback => callback(event));
+    }
   }
 
   registerFilterRef(name: string, filterRef: HTMLPwcFilterElement) {
