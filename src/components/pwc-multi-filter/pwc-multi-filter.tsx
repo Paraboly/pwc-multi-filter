@@ -119,7 +119,7 @@ export class PwcMultiFilter {
     const existingRef = this.filterRefs[name];
     this.filterRefs[name] = filterRef;
 
-    if (existingRef != filterRef) {
+    if (existingRef !== filterRef) {
       this.initialFilterSetup(name, filterRef);
     }
   }
