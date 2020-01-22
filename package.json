@@ -1,6 +1,6 @@
 {
   "name": "@paraboly/pwc-multi-filter",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A wrapper over pwc-tabview and pwc-filter. Provides means of dynamically managing multiple filters via a single component.",
   "keywords": [
     "paraboly",

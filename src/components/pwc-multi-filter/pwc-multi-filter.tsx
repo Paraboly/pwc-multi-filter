@@ -116,11 +116,13 @@ export class PwcMultiFilter {
   }
 
   registerFilterRef(name: string, filterRef: HTMLPwcFilterElement) {
-    const existingRef = this.filterRefs[name];
-    this.filterRefs[name] = filterRef;
+    if (filterRef) {
+      const existingRef = this.filterRefs[name];
+      this.filterRefs[name] = filterRef;
 
-    if (existingRef !== filterRef) {
-      this.initialFilterSetup(name, filterRef);
+      if (existingRef !== filterRef) {
+        this.initialFilterSetup(name, filterRef);
+      }
     }
   }
 
