@@ -59,8 +59,8 @@
     "tslint-config-prettier": "^1.18.0"
   },
   "dependencies": {
-    "@paraboly/pwc-filter": "^0.3.5",
-    "@paraboly/pwc-tabview": "^0.2.0"
+    "@paraboly/pwc-filter": "^1.0.0-0",
+    "@paraboly/pwc-tabview": "^3.0.0-1"
   },
   "peerDependencies": {}
 }
