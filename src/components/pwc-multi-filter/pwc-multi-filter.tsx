@@ -13,7 +13,7 @@ import _ from "lodash";
 import "@paraboly/pwc-filter";
 import "@paraboly/pwc-tabview";
 import { FilterChangedEventPayload } from "@paraboly/pwc-filter/dist/types/components/pwc-filter/FilterChangedEventPayload";
-import { ITabChangedEventPayload } from "@paraboly/pwc-tabview/dist/types/components/pwc-tabview/ITabChangedEventPayload";
+import { IState } from "@paraboly/pwc-tabview/dist/types/components/pwc-tabview/IState";
 
 // This is the only way this works, and the export has to stay as well, otherwise it throws "PwcFilter not found".
 export type _filterChangedEventType = CustomEvent<FilterChangedEventPayload>;
@@ -45,8 +45,8 @@ export class PwcMultiFilter {
   >;
 
   @Listen("tabChanged")
-  async tabChangedEventHandler(e: CustomEvent<ITabChangedEventPayload>) {
-    this.setActiveState(e.detail.handle);
+  async tabChangedEventHandler(e: CustomEvent<IState>) {
+    this.setActiveState(e.detail.title);
   }
 
   @Method()
@@ -136,7 +136,7 @@ export class PwcMultiFilter {
 
   constructFilterTab(filter: PwcMultiFilterInterfaces.IFilterTabConfig) {
     return (
-      <pwc-tabview-tab handle={filter.name}>
+      <pwc-tabview-tab title={filter.name}>
         <pwc-filter
           data={filter.data}
           items={filter.items}

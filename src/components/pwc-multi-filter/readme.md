@@ -99,7 +99,7 @@ graph TD;
   pwc-multi-filter --> pwc-tabview
   pwc-filter --> pwc-dynamic-form
   pwc-filter --> pwc-dynamic-form-content
-  pwc-dynamic-form-content --> color-picker
+  pwc-dynamic-form-content --> pwc-color-picker
   pwc-dynamic-form-content --> pwc-choices
   pwc-choices --> pwc-choices-input-bar
   pwc-choices --> pwc-choices-dropdown
