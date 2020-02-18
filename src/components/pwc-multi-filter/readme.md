@@ -97,13 +97,15 @@ graph TD;
   pwc-multi-filter --> pwc-tabview-tab
   pwc-multi-filter --> pwc-filter
   pwc-multi-filter --> pwc-tabview
-  pwc-filter --> pwc-dynamic-form
   pwc-filter --> pwc-dynamic-form-content
-  pwc-dynamic-form-content --> pwc-color-picker
-  pwc-dynamic-form-content --> pwc-choices
+  pwc-filter --> pwc-dynamic-form
+  pwc-dynamic-form-content --> pwc-dynamic-form-field
+  pwc-dynamic-form-field --> pwc-color-picker
+  pwc-dynamic-form-field --> pwc-choices
   pwc-choices --> pwc-choices-input-bar
   pwc-choices --> pwc-choices-dropdown
   pwc-choices-input-bar --> pwc-choices-option-bubble
+  pwc-choices-dropdown --> pwc-choices-dropdown-item
   pwc-tabview --> pwc-tabview-handle
   style pwc-multi-filter fill:#f9f,stroke:#333,stroke-width:4px
 ```
