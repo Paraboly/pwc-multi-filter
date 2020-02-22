@@ -163,7 +163,16 @@
         {
           type: "select-multi",
           dataField: "foo",
-          label: "foo"
+          label: "foo",
+          iconProvider: value => {
+            return {
+              src:
+                "https://www.drupal.org/files/styles/grid-3-2x/public/project-images/mWrrADXf_400x400.jpg",
+              width: "20px",
+              height: "20px",
+              placement: "left"
+            };
+          }
         },
         {
           type: "select-single",
