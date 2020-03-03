@@ -60,7 +60,7 @@ export class PwcMultiFilter {
   @Method()
   async switchToFilter(name: string) {
     // we set the tab's state -> tab emits an event -> we set our inner state -> we emit an event
-    this.tabViewRef.switchToTab(name);
+    return this.tabViewRef.switchToTab(name);
   }
 
   @Method()
