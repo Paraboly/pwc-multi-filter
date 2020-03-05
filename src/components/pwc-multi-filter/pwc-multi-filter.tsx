@@ -36,7 +36,6 @@ export class PwcMultiFilter {
   } = {};
 
   private activeFilterName: string;
-  private activeFilterRef: HTMLPwcFilterElement;
 
   private tabViewRef: HTMLPwcTabviewElement;
 
@@ -52,26 +51,43 @@ export class PwcMultiFilter {
   @Method()
   async getActiveState() {
     return {
-      filterRef: this.activeFilterRef,
+      filterRef: this.filterRefs[this.activeFilterName],
       filterName: this.activeFilterName
     };
   }
 
   @Method()
   async switchToFilter(name: string) {
+    if (!this.filterRefs.hasOwnProperty(name)) {
+      throw new Error(
+        `Cannot find a filter with name '${name}'. Refusing to switch.`
+      );
+    }
+
     // we set the tab's state -> tab emits an event -> we set our inner state -> we emit an event
     return this.tabViewRef.switchToTab(name);
   }
 
   @Method()
   async addFilter(config: PwcMultiFilterInterfaces.IFilterTabConfig) {
+    if (!config || !config.name) {
+      throw new Error(`Config is invalid. Refusing to add.`);
+    }
+
     this.filterConfigs = _.unionBy(this.filterConfigs, [config], f => f.name);
   }
 
   @Method()
   async removeFilter(name: string) {
+    if (_.findIndex(this.filterConfigs, { name }) === -1) {
+      throw new Error(
+        `Cannot find a filter with name '${name}'. Refusing to delete.`
+      );
+    }
+
     const filtered = this.filterConfigs.filter(val => val.name !== name);
     this.filterConfigs = [...filtered];
+    // delete this.filterRefs[name];
   }
 
   @Method()
@@ -84,6 +100,12 @@ export class PwcMultiFilter {
     name: string,
     callback: (filterChangedEvent: _filterChangedEventType) => void
   ) {
+    if (_.findIndex(this.filterConfigs, { name }) === -1) {
+      throw new Error(
+        `Cannot find a filter with name '${name}'. Refusing to process subscription request.`
+      );
+    }
+
     this.filterChangedEventSubscribers[name] =
       this.filterChangedEventSubscribers[name] || [];
     this.filterChangedEventSubscribers[name].push(callback);
@@ -91,16 +113,24 @@ export class PwcMultiFilter {
 
   @Method()
   async getFilterResult(name: string): Promise<object[]> {
+    if (!this.filterRefs.hasOwnProperty(name)) {
+      // tslint:disable-next-line: no-console
+      console.warn(
+        `Cannot find a filter with name '${name}'. Returning empty array.`
+      );
+
+      return [];
+    }
+
     return this.filterRefs[name].filter();
   }
 
   setActiveState(activeFilterName: string) {
     this.activeFilterName = activeFilterName;
-    this.activeFilterRef = this.filterRefs[activeFilterName];
 
     this.activeFilterChanged.emit({
       filterName: this.activeFilterName,
-      filterRef: this.activeFilterRef
+      filterRef: this.filterRefs[this.activeFilterName]
     });
   }
 

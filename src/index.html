@@ -189,15 +189,17 @@
       document.addEventListener("DOMContentLoaded", e => {
         const multiFilter = document.querySelector("pwc-multi-filter");
 
-        multiFilter.addFilter({
-          name: "first",
-          data: data,
-          items: items
-        });
-
-        multiFilter.subscribeToFilterChange("first", e => {
-          console.log("first changed", e);
-        });
+        multiFilter
+          .addFilter({
+            name: "first",
+            data: data,
+            items: items
+          })
+          .then(() => {
+            multiFilter.subscribeToFilterChange("first", e => {
+              console.log("first changed", e);
+            });
+          });
 
         let newFilterIndexer = 0;
 
@@ -206,15 +208,17 @@
           .addEventListener("click", e => {
             const index = (++newFilterIndexer).toString();
 
-            multiFilter.addFilter({
-              name: index,
-              data: data,
-              items: items
-            });
-
-            multiFilter.subscribeToFilterChange(index, e => {
-              console.log(index + " changed", e);
-            });
+            multiFilter
+              .addFilter({
+                name: index,
+                data: data,
+                items: items
+              })
+              .then(() => {
+                multiFilter.subscribeToFilterChange(index, e => {
+                  console.log(index + " changed", e);
+                });
+              });
           });
 
         document
