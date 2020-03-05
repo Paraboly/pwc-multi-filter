@@ -60,7 +60,7 @@
   },
   "dependencies": {
     "@paraboly/pwc-filter": "^3.3.2",
-    "@paraboly/pwc-tabview": "^3.1.4"
+    "@paraboly/pwc-tabview": "^3.1.5"
   },
   "peerDependencies": {}
 }
